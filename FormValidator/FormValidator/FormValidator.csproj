@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Malte Rosenbjerg</Authors>
+    <Company>Rosenbjerg Softworks</Company>
+    <Description>Build validators for forms (IFormCollection) using a simple fluent interface</Description>
+    <Copyright>2017</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Integers\**" />
+    <EmbeddedResource Remove="Integers\**" />
+    <None Remove="Integers\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.0.1" />
+  </ItemGroup>
+</Project>
