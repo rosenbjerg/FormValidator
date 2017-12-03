@@ -5,6 +5,10 @@
     <Company>Rosenbjerg Softworks</Company>
     <Description>Build validators for forms (IFormCollection) using a simple fluent interface</Description>
     <Copyright>2017</Copyright>
+    <PackageProjectUrl>https://github.com/rosenbjerg/FormValidator</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/rosenbjerg/FormValidator/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>form validator builder iformcollection validation</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Integers\**" />
