@@ -5,15 +5,13 @@ using Microsoft.AspNetCore.Http;
 
 namespace FormValidator
 {
-    public class ParsedIntegersField : IntegersField
+    public class PredicateIntegersField : IntegersField
     {
-        private readonly int _minValue;
-        private readonly int _maxValue;
+        private readonly Func<int, bool> _predicate;
 
-        public ParsedIntegersField(string fieldName, int minAmount, int maxAmount, int minValue, int maxValue) : base(fieldName, minAmount, maxAmount)
+        public PredicateIntegersField(string fieldName, int minAmount, int maxAmount, Func<int, bool> predicate) : base(fieldName, minAmount, maxAmount)
         {
-            _minValue = minValue;
-            _maxValue = maxValue;
+            _predicate = predicate;
         }
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
@@ -22,8 +20,7 @@ namespace FormValidator
                    field.Count >= MinAmount &&
                    field.Count <= MaxAmount &&
                    field.All(val => int.TryParse(val, numberStyles, cultureInfo, out var parsed) &&
-                                    parsed >= _minValue && 
-                                    parsed <= _maxValue);
+                                    _predicate(parsed));
         }
     }
 }

@@ -24,7 +24,6 @@ namespace FormValidator
             if (unsatisfied.Any())
                 return false;
             return true;
-            return !unsatisfied.Any();
         }
     }
 }

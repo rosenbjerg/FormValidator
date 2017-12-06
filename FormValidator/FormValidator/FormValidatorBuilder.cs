@@ -26,11 +26,11 @@ namespace FormValidator
 
         public FormValidatorBuilder RequiresInteger(string fieldName)
         {
-            return AddRequiredField(new IntegerField(fieldName));
+            return AddRequiredField(new IntegersField(fieldName, 1, 1));
         }
         public FormValidatorBuilder RequiresInteger(string fieldName, int min, int max)
         {
-            return AddRequiredField(new ParsedIntegerField(fieldName, min, max));
+            return AddRequiredField(new ParsedIntegersField(fieldName, 1, 1, min, max));
         }
         
         public FormValidatorBuilder RequiresIntegers(string fieldName, int amount)
@@ -53,11 +53,11 @@ namespace FormValidator
         
         public FormValidatorBuilder RequiresRational(string fieldName)
         {
-            return AddRequiredField(new RationalField(fieldName));
+            return AddRequiredField(new RationalsField(fieldName, 1, 1));
         }
         public FormValidatorBuilder RequiresRational(string fieldName, double min, double max)
         {
-            return AddRequiredField(new ParsedRationalField(fieldName, min, max));
+            return AddRequiredField(new ParsedRationalsField(fieldName, 1, 1, min, max));
         }
         
         public FormValidatorBuilder RequiresRationals(string fieldName, int amount)
@@ -76,15 +76,19 @@ namespace FormValidator
         {
             return AddRequiredField(new ParsedRationalsField(fieldName, minAmount, maxAmount, minValue, maxValue));
         }
-        
-        
+
+
+        public FormValidatorBuilder RequiresString(string fieldName, Func<string, bool> predicate)
+        {
+            return AddRequiredField(new PredicateStringsField(fieldName, 1, 1, predicate));
+        }
         public FormValidatorBuilder RequiresString(string fieldName, int minLength = 1, int maxLength = -1)
         {
-            return AddRequiredField(new StringField(fieldName, minLength, maxLength));
+            return AddRequiredField(new StringsField(fieldName, 1, 1, minLength, maxLength));
         }
         public FormValidatorBuilder RequiresStringWithPattern(string fieldName, Regex pattern)
         {
-            return AddRequiredField(new PatternStringField(fieldName, pattern));
+            return AddRequiredField(new PatternStringsField(fieldName, 1, 1, pattern));
         }
         
         public FormValidatorBuilder RequiresStrings(string fieldName, int amount, int minLength = 1, int maxLength = -1)
@@ -104,6 +108,7 @@ namespace FormValidator
             return AddRequiredField(new PatternStringsField(fieldName, minAmount, maxAmount, pattern));
         }
 
+        
         public FormValidatorBuilder WithNumberStyles(NumberStyles numberStyles)
         {
             _numberStyles = numberStyles;
