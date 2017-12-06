@@ -218,5 +218,45 @@ namespace FormValidator.Tests
             // Assert
             Assert.IsFalse(valid);
         }
+
+        [TestMethod]
+        public void Validate_OneField_String_Predicate_FieldsExists_Valid()
+        {
+            // Arrange
+            var form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                {"type", "diesel"}
+            });
+            var validator = FormValidatorBuilder
+                .New()
+                .RequiresString("type", s => s == "petrol" || s == "diesel")
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsTrue(valid);
+        }
+
+        [TestMethod]
+        public void Validate_OneField_String_Predicate_FieldsExists_Invalid()
+        {
+            // Arrange
+            var form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                {"type", "rum"}
+            });
+            var validator = FormValidatorBuilder
+                .New()
+                .RequiresString("type", s => s == "petrol" || s == "diesel")
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsFalse(valid);
+        }
     }
 }

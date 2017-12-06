@@ -1,27 +1,22 @@
 ﻿using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 
 namespace FormValidator
 {
-    public class IntegersField : IntegerField
+    public class IntegersField : RequiredField
     {
-        protected readonly int MinAmount;
-        protected readonly int MaxAmount;
+        private static readonly Regex ValidationRegex = new Regex("-?\\d+", RegexOptions.Compiled);
         
-        public IntegersField(string fieldName, int minAmount, int maxAmount) : base(fieldName)
+        public IntegersField(string fieldName, int minAmount, int maxAmount) : base(fieldName, minAmount, maxAmount)
         {
-            MinAmount = minAmount;
-            MaxAmount = maxAmount;
         }
         
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return form.TryGetValue(FieldName, out var field) &&
-                   field.Count >= MinAmount &&
-                   field.Count <= MaxAmount &&
+            return TryGetField(form, out var field) &&
                    field.All(ValidationRegex.IsMatch);
         }
     }

@@ -4,24 +4,22 @@ using Microsoft.AspNetCore.Http;
 
 namespace FormValidator
 {
-    class StringsField : StringField
+    class StringsField : RequiredField
     {
-        private readonly int _minAmount;
-        private readonly int _maxAmount;
+        private readonly int _minLength;
+        private readonly int _maxLength;
 
-        public StringsField(string fieldName, int minAmount, int maxAmount, int minLength = 0, int maxLength = -1) : base(fieldName, minLength, maxLength)
+        public StringsField(string fieldName, int minAmount, int maxAmount, int minLength = 0, int maxLength = -1) : base(fieldName, minAmount, maxAmount)
         {
-            _minAmount = minAmount;
-            _maxAmount = maxAmount;
+            _minLength = minLength;
+            _maxLength = maxLength;
         }
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return form.TryGetValue(FieldName, out var field) &&
-                   field.Count >= _minAmount && 
-                   field.Count <= _maxAmount &&
-                   field.All(s => s.Length >= MinLength && 
-                                  (MaxLength == -1 || s.Length <= MaxLength));
+            return TryGetField(form, out var field) &&
+                   field.All(s => s.Length >= _minLength && 
+                                  (_maxLength == -1 || s.Length <= _maxLength));
         }
     }
 }

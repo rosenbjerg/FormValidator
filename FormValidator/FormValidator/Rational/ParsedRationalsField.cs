@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace FormValidator
 {
-    public class ParsedRationalsField : RationalsField
+    public class ParsedRationalsField : RequiredField
     {
         private readonly double _minValue;
         private readonly double _maxValue;
@@ -18,7 +18,7 @@ namespace FormValidator
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return form.TryGetValue(FieldName, out var field) &&
+            return TryGetField(form, out var field) &&
                    field.All(val => double.TryParse(val, numberStyles, cultureInfo, out var parsed) &&
                                     parsed >= _minValue && 
                                     parsed <= _maxValue);

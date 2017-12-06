@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace FormValidator
 {
-    public class PredicateStringsField : IntegersField
+    public class PredicateStringsField : RequiredField
     {
         private readonly Func<string, bool> _predicate;
 
@@ -17,9 +17,7 @@ namespace FormValidator
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return form.TryGetValue(FieldName, out var field) &&
-                   field.Count >= MinAmount &&
-                   field.Count <= MaxAmount &&
+            return TryGetField(form, out var field) &&
                    field.All(val => _predicate(val));
         }
     }

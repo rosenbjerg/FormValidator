@@ -9,6 +9,8 @@
     <PackageLicenseUrl>https://github.com/rosenbjerg/FormValidator/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>form validator builder iformcollection validation</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>support for predicates</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Integers\**" />

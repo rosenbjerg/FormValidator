@@ -5,23 +5,19 @@ using Microsoft.AspNetCore.Http;
 
 namespace FormValidator
 {
-    class PatternStringsField : PatternStringField
+    class PatternStringsField : RequiredField
     {
-        private readonly int _minAmount;
-        private readonly int _maxAmount;
+        private readonly Regex _pattern;
 
-        public PatternStringsField(string fieldName, int minAmount, int maxAmount, Regex pattern) : base(fieldName, pattern)
+        public PatternStringsField(string fieldName, int minAmount, int maxAmount, Regex pattern) : base(fieldName, minAmount, maxAmount)
         {
-            _minAmount = minAmount;
-            _maxAmount = maxAmount;
+            _pattern = pattern;
         }
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return form.TryGetValue(FieldName, out var field) &&
-                   field.Count >= _minAmount && 
-                   field.Count <= _maxAmount &&
-                   field.All(ValidationRegex.IsMatch);
+            return TryGetField(form, out var field) &&
+                   field.All(_pattern.IsMatch);
         }
     }
 }
