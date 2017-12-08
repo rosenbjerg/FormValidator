@@ -19,5 +19,10 @@ namespace FormValidator
             return TryGetField(form, out var field) &&
                    field.All(_pattern.IsMatch);
         }
+        public override bool IsSatisfied(IQueryCollection query, NumberStyles numberStyles, CultureInfo cultureInfo)
+        {
+            return TryGetField(query, out var field) &&
+                   field.All(_pattern.IsMatch);
+        }
     }
 }

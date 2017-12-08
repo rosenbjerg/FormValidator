@@ -11,7 +11,7 @@ namespace FormValidator
     /// </summary>
     public class FormValidatorBuilder
     {
-        private readonly List<RequiredField> _requiredFields = new List<RequiredField>();
+        private readonly List<ISatisfiable> _requiredFields = new List<ISatisfiable>();
         private NumberStyles _numberStyles = NumberStyles.AllowDecimalPoint;
         private CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
 
@@ -37,6 +37,20 @@ namespace FormValidator
             return AddRequiredField(new PredicateIntegersField(fieldName, 1, 1, predicate));
         }
 
+        public FormValidatorBuilder CanHaveInteger(string fieldName)
+        {
+            return AddRequiredField(new OptionalField(new IntegersField(fieldName, 1, 1)));
+        }
+        public FormValidatorBuilder CanHaveInteger(string fieldName, int min, int max)
+        {
+            return AddRequiredField(new OptionalField(new ParsedIntegersField(fieldName, 1, 1, min, max)));
+        }
+        public FormValidatorBuilder CanHaveInteger(string fieldName, Func<int, bool> predicate)
+        {
+            return AddRequiredField(new OptionalField(new PredicateIntegersField(fieldName, 1, 1, predicate)));
+        }
+
+
         public FormValidatorBuilder RequiresIntegers(string fieldName, int amount)
             => RequiresIntegers(fieldName, amount, amount);
         public FormValidatorBuilder RequiresIntegers(string fieldName, int minAmount, int maxAmount)
@@ -58,7 +72,20 @@ namespace FormValidator
             return AddRequiredField(new ParsedIntegersField(fieldName, minAmount, maxAmount, minValue, maxValue));
         }
         
-        
+        public FormValidatorBuilder CanHaveIntegers(string fieldName, int minAmount, int maxAmount)
+        {
+            return AddRequiredField(new OptionalField(new IntegersField(fieldName, minAmount, maxAmount)));
+        }
+        public FormValidatorBuilder CanHaveIntegers(string fieldName, int minAmount, int maxAmount, Func<int, bool> predicate)
+        {
+            return AddRequiredField(new PredicateIntegersField(fieldName, minAmount, maxAmount, predicate));
+        }
+        public FormValidatorBuilder CanHaveIntegers(string fieldName, int minAmount, int maxAmount, int minValue, int maxValue)
+        {
+            return AddRequiredField(new OptionalField(new ParsedIntegersField(fieldName, minAmount, maxAmount, minValue, maxValue)));
+        }
+
+
         // Rationals
         public FormValidatorBuilder RequiresRational(string fieldName)
         {
@@ -71,6 +98,19 @@ namespace FormValidator
         public FormValidatorBuilder RequiresRational(string fieldName, Func<double, bool> predicate)
         {
             return AddRequiredField(new PredicateRationalsField(fieldName, 1, 1, predicate));
+        }
+
+        public FormValidatorBuilder CanHaveRational(string fieldName)
+        {
+            return AddRequiredField(new OptionalField(new RationalsField(fieldName, 1, 1)));
+        }
+        public FormValidatorBuilder CanHaveRational(string fieldName, double min, double max)
+        {
+            return AddRequiredField(new OptionalField(new ParsedRationalsField(fieldName, 1, 1, min, max)));
+        }
+        public FormValidatorBuilder CanHaveRational(string fieldName, Func<double, bool> predicate)
+        {
+            return AddRequiredField(new OptionalField(new PredicateRationalsField(fieldName, 1, 1, predicate)));
         }
 
         public FormValidatorBuilder RequiresRationals(string fieldName, int amount)
@@ -94,19 +134,46 @@ namespace FormValidator
             return AddRequiredField(new ParsedRationalsField(fieldName, minAmount, maxAmount, minValue, maxValue));
         }
 
+        public FormValidatorBuilder CanHaveRationals(string fieldName, int minAmount, int maxAmount)
+        {
+            return AddRequiredField(new OptionalField(new RationalsField(fieldName, minAmount, maxAmount)));
+        }
+        public FormValidatorBuilder CanHaveRationals(string fieldName, int minAmount, int maxAmount, Func<double, bool> predicate)
+        {
+            return AddRequiredField(new OptionalField(new PredicateRationalsField(fieldName, minAmount, maxAmount, predicate)));
+        }
+        public FormValidatorBuilder CanHaveRationals(string fieldName, int minAmount, int maxAmount, double minValue, double maxValue)
+        {
+            return AddRequiredField(new OptionalField(new ParsedRationalsField(fieldName, minAmount, maxAmount, minValue, maxValue)));
+        }
+
 
         // Strings
         public FormValidatorBuilder RequiresString(string fieldName, int minLength = 1, int maxLength = -1)
         {
             return AddRequiredField(new StringsField(fieldName, 1, 1, minLength, maxLength));
         }
+        public FormValidatorBuilder CanHaveString(string fieldName, int minLength = 1, int maxLength = -1)
+        {
+            return AddRequiredField(new OptionalField(new StringsField(fieldName, 1, 1, minLength, maxLength)));
+        }
+        
         public FormValidatorBuilder RequiresString(string fieldName, Func<string, bool> predicate)
         {
             return AddRequiredField(new PredicateStringsField(fieldName, 1, 1, predicate));
         }
+        public FormValidatorBuilder CanHaveString(string fieldName, Func<string, bool> predicate)
+        {
+            return AddRequiredField(new OptionalField(new PredicateStringsField(fieldName, 1, 1, predicate)));
+        }
+        
         public FormValidatorBuilder RequiresStringWithPattern(string fieldName, Regex pattern)
         {
             return AddRequiredField(new PatternStringsField(fieldName, 1, 1, pattern));
+        }
+        public FormValidatorBuilder CanHaveString(string fieldName, Regex pattern)
+        {
+            return AddRequiredField(new OptionalField(new PatternStringsField(fieldName, 1, 1, pattern)));
         }
 
 
@@ -116,6 +183,10 @@ namespace FormValidator
         {
             return AddRequiredField(new StringsField(fieldName, minAmount, maxAmount, minLength, maxLength));
         }
+        public FormValidatorBuilder CanHaveStrings(string fieldName, int minAmount, int maxAmount, int minLength = 1, int maxLength = -1)
+        {
+            return AddRequiredField(new OptionalField(new StringsField(fieldName, minAmount, maxAmount, minLength, maxLength)));
+        }
 
         public FormValidatorBuilder RequiresStrings(string fieldName, int amount, Func<string, bool> predicate)
             => RequiresStrings(fieldName, amount, amount, predicate);
@@ -123,12 +194,20 @@ namespace FormValidator
         {
             return AddRequiredField(new PredicateStringsField(fieldName, minAmount, maxAmount, predicate));
         }
+        public FormValidatorBuilder CanHaveStrings(string fieldName, int minAmount, int maxAmount, Func<string, bool> predicate)
+        {
+            return AddRequiredField(new OptionalField(new PredicateStringsField(fieldName, minAmount, maxAmount, predicate)));
+        }
 
         public FormValidatorBuilder RequiresStringsWithPattern(string fieldName, int amount, Regex pattern)
             => RequiresStringsWithPattern(fieldName, amount, amount, pattern);
         public FormValidatorBuilder RequiresStringsWithPattern(string fieldName, int minAmount, int maxAmount, Regex pattern)
         {
             return AddRequiredField(new PatternStringsField(fieldName, minAmount, maxAmount, pattern));
+        }
+        public FormValidatorBuilder CanHaveStringsWithPattern(string fieldName, int minAmount, int maxAmount, Regex pattern)
+        {
+            return AddRequiredField(new OptionalField(new PatternStringsField(fieldName, minAmount, maxAmount, pattern)));
         }
         
 
@@ -162,10 +241,10 @@ namespace FormValidator
             _cultureInfo = CultureInfo.CurrentCulture;
         }
         
-        private FormValidatorBuilder AddRequiredField(RequiredField requiredField)
+        private FormValidatorBuilder AddRequiredField(ISatisfiable requiredField)
         {
-            if (_requiredFields.Any(field => field.FieldName == requiredField.FieldName))
-                throw new ArgumentException("Field already added to builder", nameof(requiredField.FieldName));
+            if (_requiredFields.Any(field => field.Fieldname == requiredField.Fieldname))
+                throw new ArgumentException("Field already added to builder", nameof(requiredField.Fieldname));
             _requiredFields.Add(requiredField);
             return this;
         }

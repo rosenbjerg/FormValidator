@@ -21,5 +21,11 @@ namespace FormValidator
                    field.All(val => double.TryParse(val, numberStyles, cultureInfo, out var parsed) &&
                                     _predicate(parsed));
         }
+        public override bool IsSatisfied(IQueryCollection query, NumberStyles numberStyles, CultureInfo cultureInfo)
+        {
+            return TryGetField(query, out var field) &&
+                   field.All(val => double.TryParse(val, numberStyles, cultureInfo, out var parsed) &&
+                                    _predicate(parsed));
+        }
     }
 }

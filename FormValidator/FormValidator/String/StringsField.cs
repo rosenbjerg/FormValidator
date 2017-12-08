@@ -21,5 +21,12 @@ namespace FormValidator
                    field.All(s => s.Length >= _minLength && 
                                   (_maxLength == -1 || s.Length <= _maxLength));
         }
+
+        public override bool IsSatisfied(IQueryCollection query, NumberStyles numberStyles, CultureInfo cultureInfo)
+        {
+            return TryGetField(query, out var field) &&
+                   field.All(s => s.Length >= _minLength && 
+                                  (_maxLength == -1 || s.Length <= _maxLength));
+        }
     }
 }

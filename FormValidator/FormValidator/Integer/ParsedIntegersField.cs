@@ -22,5 +22,12 @@ namespace FormValidator
                                     parsed >= _minValue && 
                                     parsed <= _maxValue);
         }
+        public override bool IsSatisfied(IQueryCollection query, NumberStyles numberStyles, CultureInfo cultureInfo)
+        {
+            return TryGetField(query, out var field) &&
+                   field.All(val => int.TryParse(val, numberStyles, cultureInfo, out var parsed) &&
+                                    parsed >= _minValue && 
+                                    parsed <= _maxValue);
+        }
     }
 }
