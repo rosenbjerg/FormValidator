@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FormValidator.Tests
+namespace Validation.Tests
 {
     [TestClass]
     public class FormValidator_Integers_Tests
@@ -17,7 +17,7 @@ namespace FormValidator.Tests
             {
                 {"number", "32423" },
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
                 .RequiresInteger("number")
                 .Build();
@@ -37,9 +37,9 @@ namespace FormValidator.Tests
             {
                 {"zip", "9000" },
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
-                .RequiresInteger("zip", 1000, 9999)
+                .RequiresInteger("zip", zip => zip > 1000 && zip < 9999)
                 .Build();
             
             // Act
@@ -58,10 +58,10 @@ namespace FormValidator.Tests
                 {"age", "24"},
                 {"zip", "9000"},
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
-                .RequiresInteger("zip", 1000, 9999)
-                .RequiresInteger("age", 0, 150)
+                .RequiresInteger("zip", zip => zip > 1000 && zip < 9999)
+                .RequiresInteger("age", age => age > 0 && age < 150)
                 .Build();
             
             // Act
@@ -78,7 +78,7 @@ namespace FormValidator.Tests
             var form = new FormCollection(new Dictionary<string, StringValues>
             {
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
                 .RequiresInteger("zip")
                 .RequiresInteger("age")
@@ -100,7 +100,7 @@ namespace FormValidator.Tests
                 {"firstname", "John"},
                 {"lastname", "Doe"}
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
                 .RequiresInteger("zip")
                 .RequiresInteger("age")

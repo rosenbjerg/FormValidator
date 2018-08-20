@@ -3,26 +3,26 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 
-namespace FormValidator
+namespace Validation
 {
-    public class RationalsField : RequiredField
+    public class RationalsField : BasicField
     {
         private static readonly Regex ValidationRegex = new Regex($"-?\\d+(\\{NumberFormatInfo.CurrentInfo.NumberDecimalSeparator}\\d+)?", RegexOptions.Compiled);
 
-        public RationalsField(string fieldName, int minAmount, int maxAmount) 
-            : base(fieldName, minAmount, maxAmount)
+        public RationalsField(string fieldName, int minAmount, int maxAmount, bool optional = false) 
+            : base(fieldName, minAmount, maxAmount, optional)
         {
         }
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return TryGetField(form, out var field) &&
-                   field.All(ValidationRegex.IsMatch);
+            if (!form.TryGetValue(Fieldname, out var field)) return Optional;
+            return field.All(ValidationRegex.IsMatch) || Optional;
         }
         public override bool IsSatisfied(IQueryCollection query, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return TryGetField(query, out var field) &&
-                   field.All(ValidationRegex.IsMatch);
+            if (!query.TryGetValue(Fieldname, out var field)) return Optional;
+            return field.All(ValidationRegex.IsMatch) || Optional;
         }
     }
 }

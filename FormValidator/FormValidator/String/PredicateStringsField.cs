@@ -3,27 +3,27 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace FormValidator
+namespace Validation
 {
-    public class PredicateStringsField : RequiredField
+    public class PredicateStringsField : BasicField
     {
         private readonly Func<string, bool> _predicate;
 
-        public PredicateStringsField(string fieldName, int minAmount, int maxAmount, Func<string, bool> predicate) 
-            : base(fieldName, minAmount, maxAmount)
+        public PredicateStringsField(string fieldName, int minAmount, int maxAmount, Func<string, bool> predicate, bool optional = false) 
+            : base(fieldName, minAmount, maxAmount, optional)
         {
             _predicate = predicate;
         }
         
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return TryGetField(form, out var field) &&
-                   field.All(val => _predicate(val));
+            if (!form.TryGetValue(Fieldname, out var field)) return Optional;
+            return AmountOk(field) && field.All(val => _predicate(val));
         }
         public override bool IsSatisfied(IQueryCollection query, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return TryGetField(query, out var field) &&
-                   field.All(val => _predicate(val));
+            if (!query.TryGetValue(Fieldname, out var field)) return Optional;
+            return AmountOk(field) && field.All(val => _predicate(val));
         }
     }
 }

@@ -1,32 +1,25 @@
 ﻿using System.Globalization;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace FormValidator
+namespace Validation
 {
-    class StringsField : RequiredField
+    class StringsField : BasicField
     {
-        private readonly int _minLength;
-        private readonly int _maxLength;
-
-        public StringsField(string fieldName, int minAmount, int maxAmount, int minLength = 0, int maxLength = -1) : base(fieldName, minAmount, maxAmount)
+        public StringsField(string fieldName, int minAmount, int maxAmount, bool optional = false) : base(fieldName,
+            minAmount, maxAmount, optional)
         {
-            _minLength = minLength;
-            _maxLength = maxLength;
         }
-        
+
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return TryGetField(form, out var field) &&
-                   field.All(s => s.Length >= _minLength && 
-                                  (_maxLength == -1 || s.Length <= _maxLength));
+            if (!form.TryGetValue(Fieldname, out var field)) return Optional;
+            return AmountOk(field);
         }
 
         public override bool IsSatisfied(IQueryCollection query, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return TryGetField(query, out var field) &&
-                   field.All(s => s.Length >= _minLength && 
-                                  (_maxLength == -1 || s.Length <= _maxLength));
+            if (!query.TryGetValue(Fieldname, out var field)) return Optional;
+            return AmountOk(field);
         }
     }
 }

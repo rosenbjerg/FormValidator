@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FormValidator.Tests
+namespace Validation.Tests
 {
     [TestClass]
     public class FormValidator_Rationals_Tests
@@ -18,7 +18,7 @@ namespace FormValidator.Tests
                 {"height", "123.12"},
                 {"weight", "321.32"}
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
                 .RequiresRational("height")
                 .RequiresRational("weight")
@@ -40,7 +40,7 @@ namespace FormValidator.Tests
                 {"firstname", "John"},
                 {"lastname", "Doe"}
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
                 .RequiresRational("weight")
                 .RequiresRational("height")
@@ -63,10 +63,10 @@ namespace FormValidator.Tests
                 {"height", "123,12"},
                 {"weight", "175,32"}
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
-                .RequiresRational("height", 100, 250)
-                .RequiresRational("weight", 10, 200)
+                .RequiresRational("height", height => height > 10 && height < 300)
+                .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
                 .Build();
 
             // Act
@@ -85,10 +85,10 @@ namespace FormValidator.Tests
                 {"height", "123.12"},
                 {"weight", "175.32"}
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
-                .RequiresRational("height", 100, 250)
-                .RequiresRational("weight", 10, 200)
+                .RequiresRational("height", height => height > 10 && height < 300)
+                .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
                 .Build();
 
             // Act
@@ -106,10 +106,10 @@ namespace FormValidator.Tests
                 {"height", "123.12"},
                 {"weight", "175.32"}
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
-                .RequiresRational("height", 100, 250)
-                .RequiresRational("weight", 10, 200)
+                .RequiresRational("height", height => height > 10 && height < 300)
+                .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
                 .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
@@ -129,10 +129,10 @@ namespace FormValidator.Tests
                 {"height", "323,12"},
                 {"weight", "375,32"}
             });
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
-                .RequiresRational("height", 100, 250)
-                .RequiresRational("weight", 10, 200)
+                .RequiresRational("height", height => height > 10 && height < 300)
+                .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
                 .Build();
 
             // Act
@@ -147,10 +147,10 @@ namespace FormValidator.Tests
         {
             // Arrange
             var form = new FormCollection(new Dictionary<string, StringValues>());
-            var validator = FormValidatorBuilder
+            var validator = ValidatorBuilder
                 .New()
-                .RequiresRational("height", 100, 250)
-                .RequiresRational("weight", 10, 200)
+                .RequiresRational("height", height => height > 10 && height < 300)
+                .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
                 .Build();
 
             // Act
