@@ -23,7 +23,7 @@ namespace Validation
         public override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
             if (!form.TryGetValue(Fieldname, out var field)) return Optional;
-            return AmountOk(field) && field.All(value => ValidationRegex.IsMatch(value)) || Optional;
+            return AmountOk(field) && field.All(value => ValidationRegex.IsMatch(value));
         }
     }
 }

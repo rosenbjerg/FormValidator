@@ -4,17 +4,22 @@
     <Authors>Malte Rosenbjerg</Authors>
     <Company>Rosenbjerg Softworks</Company>
     <Description>Build validators for forms (IFormCollection) and queries (IQueryCollection) using a simple fluent interface</Description>
-    <Copyright>2018</Copyright>
+    <Copyright>2019</Copyright>
     <PackageProjectUrl>https://github.com/rosenbjerg/FormValidator</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/rosenbjerg/FormValidator/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>form validator builder iformcollection validation</PackageTags>
+    <PackageTags>form validator fluent builder formcollection iformcollection validation query querycollection iquerycollection</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.0.0</Version>
-    <PackageReleaseNotes>can now validate the existence of IFormFiles on IFormCollection</PackageReleaseNotes>
+    <PackageReleaseNotes>95% test coverage</PackageReleaseNotes>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <AssemblyName>Validation</AssemblyName>
     <RootNamespace>Validation</RootNamespace>
     <PackageId>FormValidator</PackageId>
+    <LangVersion>8</LangVersion>
+    <PackageVersion>2.1.0</PackageVersion>
+    <Title>FormValidator</Title>
+    <RepositoryUrl>https://github.com/rosenbjerg/FormValidator</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Integers\**" />

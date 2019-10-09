@@ -23,20 +23,15 @@ namespace Validation
         public bool Validate(IFormCollection form)
         {
             if (form == null)
-                throw new ArgumentNullException(nameof(form));
-            var unsatisfied = _fields.Where(rf => !rf.IsSatisfied(form, _numberStyles, _cultureInfo));
-            if (unsatisfied.Any())
                 return false;
-            return true;
+            
+            return _fields.All(rf => rf.IsSatisfied(form, _numberStyles, _cultureInfo));
         }
         public bool Validate(IQueryCollection query)
         {
             if (query == null)
-                throw new ArgumentNullException(nameof(query));
-            var unsatisfied = _fields.Where(rf => !rf.IsSatisfied(query, _numberStyles, _cultureInfo));
-            if (unsatisfied.Any())
                 return false;
-            return true;
+            return _fields.All(rf => rf.IsSatisfied(query, _numberStyles, _cultureInfo));
         }
     }
 }

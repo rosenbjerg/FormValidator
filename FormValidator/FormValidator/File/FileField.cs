@@ -15,6 +15,5 @@ namespace Validation.File
             if (!TryGetFileField(form, out var files)) return Optional;
             return AmountOk(files);
         }
-        
     }
 }

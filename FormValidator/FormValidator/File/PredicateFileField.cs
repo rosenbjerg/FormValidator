@@ -18,7 +18,7 @@ namespace Validation.File
         public sealed override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
             if (!TryGetFileField(form, out var files)) return Optional;
-            return AmountOk(files) && files.All(file => _predicate(file)) && AmountOk(files) || Optional;
+            return AmountOk(files) && files.All(file => _predicate(file));
         }
     }
 }

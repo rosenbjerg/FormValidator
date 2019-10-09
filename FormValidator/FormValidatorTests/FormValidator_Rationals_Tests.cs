@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Primitives;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using Validation;
 
-namespace Validation.Tests
+namespace FormValidatorTests
 {
-    [TestClass]
+    [TestFixture]
     public class FormValidator_Rationals_Tests
     {
-        [TestMethod]
+        [Test]
         public void Validate_TwoFields_Rational_Unbounded_FieldsExists_Valid()
         {
             // Arrange
@@ -31,7 +33,7 @@ namespace Validation.Tests
             Assert.IsTrue(valid);
         }
 
-        [TestMethod]
+        [Test]
         public void Validate_TwoFields_Rational_Unbounded_WrongFields_Invalid()
         {
             // Arrange
@@ -53,8 +55,78 @@ namespace Validation.Tests
             Assert.IsFalse(valid);
         }
 
+        [TestCase(1, 2, false, "1", "2", "3")]
+        [TestCase(4, 5, false, "1", "2", "3")]
+        [TestCase(4, 5, false, "1", "2", "3", "a")]
+        [TestCase(4, 5, false, "1", "2", "3", "a", "b")]
+        [TestCase(4, 5, true, "1", "2", "3", "4")]
+        [TestCase(4, 5, true, "1", "2", "3", "4", "5")]
+        public void Validate_OneField_MultipleRationals_DataTest(int min, int max, bool expected, params string[] values)
+        {
+            // Arrange
+            var form = new QueryCollection(new Dictionary<string, StringValues>
+            {
+                {"blah", new StringValues(values)}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .RequiresRationals("blah", min, max)
+                .Build();
 
-        [TestMethod]
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.AreEqual(valid, expected);
+        }
+        [Test]
+        public void Validate_TwoFields_Rationals_Unbounded_Valid()
+        {
+            // Arrange
+            var form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                {"zip", "1"},
+                {"age", new StringValues(new []{"1", "2"})},
+                {"age2", new StringValues(new []{"1", "2"})}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .CanHaveRational("zip")
+                .CanHaveRationals("age", 2, 3)
+                .CanHaveRationals("age2", 2, 3, i => i > 0 && i < 3)
+                .Build();
+            
+            // Act
+            var valid = validator.Validate(form);
+            
+            // Assert
+            Assert.IsTrue(valid);
+        }
+        [Test]
+        public void Validate_QueryCollection_TwoFields_Rationals_Unbounded_Valid()
+        {
+            // Arrange
+            var form = new QueryCollection(new Dictionary<string, StringValues>
+            {
+                {"zip", "1"},
+                {"age", new StringValues(new []{"1", "2"})},
+                {"age2", new StringValues(new []{"1", "2"})}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .CanHaveRational("zip")
+                .CanHaveRationals("age", 2, 3)
+                .CanHaveRationals("age2", 2, 3, i => i > 0 && i < 3)
+                .Build();
+            
+            // Act
+            var valid = validator.Validate(form);
+            
+            // Assert
+            Assert.IsTrue(valid);
+        }
+   
+        [Test]
         public void Validate_TwoFields_Rational_Bounded_FieldsExists_Valid()
         {
             // Arrange
@@ -76,7 +148,7 @@ namespace Validation.Tests
             Assert.IsTrue(valid);
         }
 
-        [TestMethod]
+        [Test]
         public void Validate_TwoFields_Rational_WrongSeparator_Bounded_FieldsExists_Invalid()
         {
             // Arrange
@@ -97,7 +169,7 @@ namespace Validation.Tests
             // Assert
             Assert.IsFalse(valid);
         }
-        [TestMethod]
+        [Test]
         public void Validate_TwoFields_Rational_AltSeparator_Bounded_FieldsExists_Valid()
         {
             // Arrange
@@ -120,7 +192,7 @@ namespace Validation.Tests
             Assert.IsTrue(valid);
         }
 
-        [TestMethod]
+        [Test]
         public void Validate_TwoFields_Rational_Bounded_ValuesOutsideBounds_Invalid()
         {
             // Arrange
@@ -142,7 +214,7 @@ namespace Validation.Tests
             Assert.IsFalse(valid);
         }
 
-        [TestMethod]
+        [Test]
         public void Validate_Rational_Bounded_NoFields_Invalid()
         {
             // Arrange
