@@ -157,7 +157,7 @@ namespace FormValidatorTests
         }
 
         [Test]
-        public void Validate_TwoFields_Strings_MultipleValues_Bounded_OneField_Invalid()
+        public void Validate_TwoFields_Strings_OneValues_Bounded_Invalid()
         {
             // Arrange
             var form = new QueryCollection(new Dictionary<string, StringValues>
@@ -277,6 +277,46 @@ namespace FormValidatorTests
 
             // Assert
             Assert.IsTrue(valid);
+        }
+        
+        [Test]
+        public void Validate_EmptyField_Optional_Valid()
+        {
+            // Arrange
+            var form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                {"email", ""}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .CanHaveStringWithPattern("email", new Regex("[^@]+@[^.]+(\\.[^.]+)+", RegexOptions.Compiled))
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsTrue(valid);
+        }
+        
+        [Test]
+        public void Validate_EmptyField_Required_Invalid()
+        {
+            // Arrange
+            var form = new QueryCollection(new Dictionary<string, StringValues>
+            {
+                {"email", ""}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .RequiresStringWithPattern("email", new Regex("[^@]+@[^.]+(\\.[^.]+)+", RegexOptions.Compiled))
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsFalse(valid);
         }
         [Test]
         public void Validate_OneField_Strings_Pattern_Invalid()
@@ -468,6 +508,24 @@ namespace FormValidatorTests
 
             // Assert
             Assert.AreEqual(valid, expected);
+        }
+        
+        [Test]
+        public void Validate_NullForm_Invalid()
+        {
+            // Arrange
+            IFormCollection form = null;
+            
+            var validator = ValidatorBuilder
+                .New()
+                .RequiresStringWithPattern("email", new Regex("[^@]+@[^.]+(\\.[^.]+)+", RegexOptions.Compiled))
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsFalse(valid);
         }
     }
 }

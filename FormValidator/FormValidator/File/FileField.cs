@@ -1,5 +1,7 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 
 namespace Validation.File
 {
@@ -10,10 +12,9 @@ namespace Validation.File
             
         }
 
-        public sealed override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
+        protected override bool IsSatisfied(IReadOnlyList<IFormFile> files)
         {
-            if (!TryGetFileField(form, out var files)) return Optional;
-            return AmountOk(files);
+            return true;
         }
     }
 }

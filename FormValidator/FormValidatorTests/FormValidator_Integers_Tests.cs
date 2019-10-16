@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
@@ -212,6 +213,45 @@ namespace FormValidatorTests
 
             // Assert
             Assert.AreEqual(valid, expected);
+        }
+        [Test]
+        public void Validate_EmptyField_Optional_Valid()
+        {
+            // Arrange
+            var form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                {"flops", ""}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .CanHaveInteger("flops")
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsTrue(valid);
+        }
+        
+        [Test]
+        public void Validate_Builder_Throws()
+        {
+            // Arrange
+            var form = new QueryCollection(new Dictionary<string, StringValues>
+            {
+                {"flops", ""}
+            });
+
+            // Act and Assert
+            Assert.Throws<ArgumentException>(() =>
+            {
+                var validator = ValidatorBuilder
+                    .New()
+                    .RequiresInteger("flops")
+                    .RequiresInteger("flops")
+                    .Build();
+            });
         }
     }
 }

@@ -231,5 +231,62 @@ namespace FormValidatorTests
             // Assert
             Assert.IsFalse(valid);
         }
+        [Test]
+        public void Validate_EmptyField_Optional_Valid()
+        {
+            // Arrange
+            var form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                {"flops", ""}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .CanHaveRational("flops")
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsTrue(valid);
+        }
+        
+        [Test]
+        public void Validate_EmptyField_Required_Invalid()
+        {
+            // Arrange
+            var form = new QueryCollection(new Dictionary<string, StringValues>
+            {
+                {"flops", ""}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .RequiresRational("flops")
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsFalse(valid);
+        }
+        
+        [Test]
+        public void Validate_NullForm_Invalid()
+        {
+            // Arrange
+            IQueryCollection form = null;
+            
+            var validator = ValidatorBuilder
+                .New()
+                .RequiresRational("flops")
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsFalse(valid);
+        }
     }
 }

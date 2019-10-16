@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +16,9 @@ namespace Validation.File
             _predicate = predicate;
         }
 
-        public sealed override bool IsSatisfied(IFormCollection form, NumberStyles numberStyles, CultureInfo cultureInfo)
+        protected override bool IsSatisfied(IReadOnlyList<IFormFile> files)
         {
-            if (!TryGetFileField(form, out var files)) return Optional;
-            return AmountOk(files) && files.All(file => _predicate(file));
+            return files.All(file => _predicate(file));
         }
     }
 }
