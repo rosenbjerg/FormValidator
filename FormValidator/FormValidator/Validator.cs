@@ -22,16 +22,11 @@ namespace Validation
 
         public bool Validate(IFormCollection form)
         {
-            if (form == null)
-                return false;
-            
-            return _fields.All(rf => rf.IsSatisfied(form, _numberStyles, _cultureInfo));
+            return form != null && _fields.All(rf => rf.IsSatisfied(form, _numberStyles, _cultureInfo));
         }
         public bool Validate(IQueryCollection query)
         {
-            if (query == null)
-                return false;
-            return _fields.All(rf => rf.IsSatisfied(query, _numberStyles, _cultureInfo));
+            return query != null && _fields.All(rf => rf.IsSatisfied(query, _numberStyles, _cultureInfo));
         }
     }
 }

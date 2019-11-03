@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
@@ -14,7 +15,7 @@ namespace Validation.File
 
         protected override bool IsSatisfied(IReadOnlyList<IFormFile> files)
         {
-            return true;
+            return files.Any() || Optional;
         }
     }
 }
