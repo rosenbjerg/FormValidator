@@ -8,8 +8,6 @@ namespace Validation
 {
     public class RationalsField : BasicField
     {
-        private static readonly Regex ValidationRegex = new Regex($"-?\\d+(\\{NumberFormatInfo.CurrentInfo.NumberDecimalSeparator}\\d+)?", RegexOptions.Compiled);
-
         public RationalsField(string fieldName, int minAmount, int maxAmount, bool optional = false) 
             : base(fieldName, minAmount, maxAmount, optional)
         {
@@ -17,7 +15,7 @@ namespace Validation
 
         protected override bool IsSatisfied(StringValues values, NumberStyles numberStyles, CultureInfo cultureInfo)
         {
-            return values.All(value => (value == "" && Optional) || ValidationRegex.IsMatch(value));
+            return values.All(value => (value == "" && Optional) || double.TryParse(value, numberStyles, cultureInfo, out _));
         }
     }
 }

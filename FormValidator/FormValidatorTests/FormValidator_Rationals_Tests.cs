@@ -24,6 +24,7 @@ namespace FormValidatorTests
                 .New()
                 .RequiresRational("height")
                 .RequiresRational("weight")
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -46,6 +47,7 @@ namespace FormValidatorTests
                 .New()
                 .RequiresRational("weight")
                 .RequiresRational("height")
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -71,6 +73,7 @@ namespace FormValidatorTests
             var validator = ValidatorBuilder
                 .New()
                 .RequiresRationals("blah", min, max)
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -94,6 +97,7 @@ namespace FormValidatorTests
                 .CanHaveRational("zip")
                 .CanHaveRationals("age", 2, 3)
                 .CanHaveRationals("age2", 2, 3, i => i > 0 && i < 3)
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
             
             // Act
@@ -117,6 +121,7 @@ namespace FormValidatorTests
                 .CanHaveRational("zip")
                 .CanHaveRationals("age", 2, 3)
                 .CanHaveRationals("age2", 2, 3, i => i > 0 && i < 3)
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
             
             // Act
@@ -132,13 +137,14 @@ namespace FormValidatorTests
             // Arrange
             var form = new FormCollection(new Dictionary<string, StringValues>
             {
-                {"height", "123,12"},
-                {"weight", "175,32"}
+                {"height", "123.12"},
+                {"weight", "175.32"}
             });
             var validator = ValidatorBuilder
                 .New()
                 .RequiresRational("height", height => height > 10 && height < 300)
                 .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -154,13 +160,14 @@ namespace FormValidatorTests
             // Arrange
             var form = new FormCollection(new Dictionary<string, StringValues>
             {
-                {"height", "123.12"},
-                {"weight", "175.32"}
+                {"height", "123,12"},
+                {"weight", "175,32"}
             });
             var validator = ValidatorBuilder
                 .New()
                 .RequiresRational("height", height => height > 10 && height < 300)
                 .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -168,6 +175,29 @@ namespace FormValidatorTests
 
             // Assert
             Assert.IsFalse(valid);
+        }
+        [Test]
+        public void Validate_TwoFields_Rational_DanishSeparator_Bounded_FieldsExists_Invalid()
+        {
+            // Arrange
+            var form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                {"height", "123,12"},
+                {"weight", "175,32"}
+            });
+            var validator = ValidatorBuilder
+                .New()
+                .RequiresRational("height", height => height > 10 && height < 300)
+                .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
+                .WithCultureInfo(CultureInfo.GetCultureInfo("da-DK"))
+                .WithNumberStyles(NumberStyles.Float)
+                .Build();
+
+            // Act
+            var valid = validator.Validate(form);
+
+            // Assert
+            Assert.IsTrue(valid);
         }
         [Test]
         public void Validate_TwoFields_Rational_AltSeparator_Bounded_FieldsExists_Valid()
@@ -205,6 +235,7 @@ namespace FormValidatorTests
                 .New()
                 .RequiresRational("height", height => height > 10 && height < 300)
                 .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -223,6 +254,7 @@ namespace FormValidatorTests
                 .New()
                 .RequiresRational("height", height => height > 10 && height < 300)
                 .RequiresRational("weight", weigth => weigth > 10 && weigth < 300)
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -242,6 +274,7 @@ namespace FormValidatorTests
             var validator = ValidatorBuilder
                 .New()
                 .CanHaveRational("flops")
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -262,6 +295,7 @@ namespace FormValidatorTests
             var validator = ValidatorBuilder
                 .New()
                 .RequiresRational("flops")
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
@@ -280,6 +314,7 @@ namespace FormValidatorTests
             var validator = ValidatorBuilder
                 .New()
                 .RequiresRational("flops")
+                .WithCultureInfo(CultureInfo.InvariantCulture)
                 .Build();
 
             // Act
